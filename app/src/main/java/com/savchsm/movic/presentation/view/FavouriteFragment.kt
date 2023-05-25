@@ -1,4 +1,4 @@
-package com.savchsm.movic.presentation
+package com.savchsm.movic.presentation.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
