@@ -2,4 +2,16 @@
     <string name="app_name">movic</string>
     <string name="home">Home</string>
     <string name="favourite">Favourite</string>
+    <string name="profile">Profile</string>
+    <string name="profile_photo_desc">profile_photo</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="email">Email</string>
+    <string name="content_description_save_profile_data">Save profile data</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="done">Done</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+    <string name="dialog_title">Profile data changed</string>
+    <string name="dialog_message">Do you want to save new data?\nIf you leave the screen, the data will not be saved.</string>
 </resources>
