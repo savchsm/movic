@@ -1,5 +1,6 @@
 package com.savchsm.movic.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,6 @@ class HomeViewModel(
     fun fetchMovies(region: String = "US") =
         fetchMoviesUseCase.invoke(region)
             .onEach { _movies.value = it }
-            .catch { println() }
+            .catch { Log.e(fetchMoviesUseCase::class.simpleName, it.message.toString()) }
             .launchIn(viewModelScope)
 }
