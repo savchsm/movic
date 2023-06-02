@@ -1,10 +1,10 @@
 package com.savchsm.movic
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.savchsm.movic.common.visible
 import com.savchsm.movic.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +16,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding?.root)
 
         val navController = this.findNavController(R.id.nav_host_fragment)
-        binding?.bottomNavigation?.setupWithNavController(navController)
+        binding?.bottomNavigation?.apply {
+            this.setupWithNavController(navController)
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                this.visible(destination.id != R.id.editProfileFragment)
+            }
+        }
     }
 }
