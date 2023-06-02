@@ -5,11 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.savchsm.movic.R
 import com.savchsm.movic.databinding.FragmentProfileBinding
 import com.savchsm.movic.presentation.viewmodel.ProfileViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -17,15 +23,6 @@ class ProfileFragment : Fragment() {
 
     private var binding: FragmentProfileBinding? = null
     private val viewModel: ProfileViewModel by viewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.getProfileData()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,23 +39,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupUI() = binding?.apply {
-        Glide.with(this.root)
-            .load("")
-            .placeholder(R.drawable.def_profile_ic)
-            .into(profileImg)
-
         btnEdit.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
         }
     }
 
-    private fun setupObservers() {
-        viewModel.profile.observe(viewLifecycleOwner) { profile ->
-            profile?.let {
+    private fun setupObservers() = lifecycleScope.launch {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewModel.profile.collect {
                 binding?.apply {
-                    tvName.text = "${profile.name} ${profile.surname}"
-                    tvEmail.text = profile.email
-
+                    tvName.text = "${it.name} ${it.surname}"
+                    tvEmail.text = it.email
                     Glide.with(this.root)
                         .load(it.image)
                         .placeholder(R.drawable.def_profile_ic)
