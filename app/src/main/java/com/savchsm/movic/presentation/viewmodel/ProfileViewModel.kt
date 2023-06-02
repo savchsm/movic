@@ -1,21 +1,19 @@
 package com.savchsm.movic.presentation.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.savchsm.movic.domain.models.Profile
 import com.savchsm.movic.domain.usecase.GetProfileUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class ProfileViewModel(
     private val getProfileUseCase: GetProfileUseCase
-): ViewModel() {
+) : ViewModel() {
 
-    private val _profile = MutableLiveData<Profile>()
-    val profile: LiveData<Profile>
-        get() = _profile
-
-    fun getProfileData() {
-        val result = getProfileUseCase.execute(id = "MY_PROFILE")
-        result?.let { _profile.value = it }
-    }
+    val profile: Flow<Profile> = flow {
+        val result = getProfileUseCase.execute("MY_PROFILE")
+        result?.let { emit(result) }
+    }.flowOn(Dispatchers.IO)
 }
